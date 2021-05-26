@@ -9,15 +9,28 @@ services:
       dockerfile: ./Dockerfile
     ports:
       - "80:80"
+    links:
+      - fluent-bit
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24225
+        tag: monitoring.access
+
+  fluent-bit:
+    image: fluent/fluent-bit:1.7
+    volumes:
+      - ./fluent-bit/conf/fluentBit.conf:/fluent-bit/etc/fluentBit.conf
     depends_on:
       - fluentd
-    links:
-      - fluentd
+    ports:
+      - "24225:24225"
+      - "24225:24225/udp"
     logging:
       driver: "fluentd"
       options:
         fluentd-address: localhost:24224
-        tag: monitoring.access
+        tag: monitoringViaFluentBit.access
 
   fluentd:
     build: ./fluentd

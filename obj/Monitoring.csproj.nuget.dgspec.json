@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Entwicklung\\IIoT\\Monitoring\\Monitoring.csproj": {}
+    "C:\\Entwicklung\\IIoT\\Fluentd-NLog\\Monitoring.csproj": {}
   },
   "projects": {
-    "c:\\Entwicklung\\IIoT\\Monitoring\\Monitoring.csproj": {
+    "C:\\Entwicklung\\IIoT\\Fluentd-NLog\\Monitoring.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Entwicklung\\IIoT\\Monitoring\\Monitoring.csproj",
+        "projectUniqueName": "C:\\Entwicklung\\IIoT\\Fluentd-NLog\\Monitoring.csproj",
         "projectName": "Monitoring",
-        "projectPath": "c:\\Entwicklung\\IIoT\\Monitoring\\Monitoring.csproj",
+        "projectPath": "C:\\Entwicklung\\IIoT\\Fluentd-NLog\\Monitoring.csproj",
         "packagesPath": "C:\\Users\\vkling\\.nuget\\packages\\",
-        "outputPath": "c:\\Entwicklung\\IIoT\\Monitoring\\obj\\",
+        "outputPath": "C:\\Entwicklung\\IIoT\\Fluentd-NLog\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Appl\\Microsoft Visual Studio\\Shared\\NuGetPackages",
@@ -49,17 +49,25 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "dependencies": {
+            "Microsoft.Extensions.Configuration.Json": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            },
+            "Microsoft.Extensions.DependencyInjection": {
+              "target": "Package",
+              "version": "[5.0.1, )"
+            },
             "NLog": {
               "target": "Package",
               "version": "[4.7.10, )"
             },
+            "NLog.Extensions.Logging": {
+              "target": "Package",
+              "version": "[1.7.2, )"
+            },
             "NLog.Targets.Fluentd": {
               "target": "Package",
               "version": "[1.0.4, )"
-            },
-            "Serilog.Sinks.Fluentd": {
-              "target": "Package",
-              "version": "[0.4.0, )"
             },
             "System.Configuration.ConfigurationManager": {
               "target": "Package",

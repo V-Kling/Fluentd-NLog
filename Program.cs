@@ -1,7 +1,10 @@
-﻿using System.Diagnostics;
+﻿using System;
 using System.Threading;
-using System;
-using Serilog;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using NLog;
+using NLog.Extensions.Logging;
 
 namespace Monitoring
 {
@@ -9,20 +12,54 @@ namespace Monitoring
     {
         static void Main(string[] args)
         {
-        var log = new LoggerConfiguration().WriteTo.Fluentd("localhost",24224,"Monitoring.Code",Serilog.Events.LogEventLevel.Debug).CreateLogger();
-
-log.Information($"That's it!");
-
-            int counter = 0;
-
-            while(true)
+            var logger = LogManager.GetCurrentClassLogger();
+         try
             {
-                Thread.Sleep(2000);
-                Console.WriteLine("Log information via Console: " + counter);
-                Thread.Sleep(2000);
-                log.Debug($"That's it!");
-                counter++;
+                var config = new ConfigurationBuilder()
+                   .SetBasePath(System.IO.Directory.GetCurrentDirectory()) //From NuGet Package Microsoft.Extensions.Configuration.Json
+                   .Build();
+
+                var servicesProvider = BuildDi(config);
+                
+                using (servicesProvider as IDisposable)
+                {
+                    var runner = servicesProvider.GetRequiredService<Runner>();
+                    runner.DoAction("Action1");
+                    int counter = 0;
+                    while (true)
+                    {
+                        Console.WriteLine("Output via Console: " + logger.IsDebugEnabled.ToString());
+                        Thread.Sleep(2000);
+                        logger.Info("Thread is Running as Info: " + counter);
+                        Thread.Sleep(1000);
+                        logger.Debug("Thread is Running as Debug: " + counter);
+                    }
+                }
             }
+            catch (Exception ex)
+            {
+                // NLog: catch any exception and log it.
+                logger.Error(ex, "Stopped program because of exception");
+                throw;
+            }
+            finally
+            {
+                // Ensure to flush and stop internal timers/threads before application-exit (Avoid segmentation fault on Linux)
+                LogManager.Shutdown();
+            }
+        }
+        private static IServiceProvider BuildDi(IConfiguration config)
+        {
+            return new ServiceCollection()
+               .AddTransient<Runner>() // Runner is the custom class
+               .AddLogging(loggingBuilder =>
+               {
+                   // configure Logging with NLog
+                   loggingBuilder.ClearProviders();
+                   loggingBuilder.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+                   loggingBuilder.AddNLog(config);
+               })
+               .BuildServiceProvider();
         }
     }
 }
