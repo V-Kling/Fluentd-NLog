@@ -29,6 +29,11 @@ Example Implementation of NLog with Fluentd-elasticsearch-Kibana
 ```
 docker-compose up -d --build
 ```
+kibana starts with:
+
+```
+http://localhost:5601/
+```
 
 ### Prerequisites
 
