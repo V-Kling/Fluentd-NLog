@@ -1,0 +1,19 @@
+name: publish
+
+on: [push]
+
+jobs:
+  publish-Edge-Agent-KNF-Image:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Build the Fluentd-NLog Docker image
+      run: |
+        echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+    - name: Build the agent-knf Docker image
+      run: |
+        docker build . --tag ghcr.io/ametek-dunker-iiot/Fluentd:latest
+        docker push ghcr.io/ametek-dunker-iiot/Fluentdf:latest
