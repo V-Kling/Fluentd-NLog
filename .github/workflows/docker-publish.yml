@@ -15,5 +15,5 @@ jobs:
 
     - name: Build the Fluentd-NLog Docker image
       run: |
-        docker build . --tag ghcr.io/ametek-dunker-iiot/Fluentd:latest
-        docker push ghcr.io/ametek-dunker-iiot/Fluentd:latest
+        docker build . --tag ghcr.io/ametek-dunker-iiot/fluentd:latest
+        docker push ghcr.io/ametek-dunker-iiot/fluentd:latest
